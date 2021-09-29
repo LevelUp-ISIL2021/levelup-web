@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import Button from '@mui/material/Button';
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 // import LoginModal from "@components/LoginModal";
 
@@ -14,22 +14,23 @@ export default function Header() {
     <header>
       <div>
           <img
-              src="img/levelup-logo.png"
-              alt="Logo LevelUp"
-              className="header-logo"
+            src={`${process.env.PUBLIC_URL}/img/levelup-logo.png`}
+            alt="Logo LevelUp"
+            className="header-logo"
           />
+          <h2>LevelUp</h2>
       </div>
       <div>
         <nav className="header-nav">
           <ul>
             <li>
-              <Link to="/levelup-web/">Inicio</Link>
+              {/* <Link to="/">Inicio</Link> */}
             </li>
             <li>
-              <Link to="/levelup-web/reviews">Reseñas</Link>
+              {/* <Link to="/reviews">Reseñas</Link> */}
             </li>
             <li>
-              <Link to="/levelup-web/downloads">Descargas</Link>
+              {/* <Link to="/downloads">Descargas</Link> */}
             </li>
           </ul>
         </nav>

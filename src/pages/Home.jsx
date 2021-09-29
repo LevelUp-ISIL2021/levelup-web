@@ -98,7 +98,7 @@ export default function Home() {
             {/* <Button variant="contained">Descargar</Button> */}
           </div>
           <div>
-            <img className="side-img" src="img/side-img01.jpeg" alt="Imagen de niño/a jugando con bloques" />
+            <img className="side-img" src={`${process.env.PUBLIC_URL}/img/side-img01.jpeg`} alt="Imagen de niño/a jugando con bloques" />
           </div>
         </div>
       </main>

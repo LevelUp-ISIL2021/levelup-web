@@ -47,11 +47,11 @@ export default function ScreenshotsCarousel() {
         responsive={responsive}
       >
         {
-          [{ src: "img/screen-01.webp", alt: "Screen 01" },
-          { src: "img/screen-02.jpeg", alt: "Screen 02" },
-          { src: "img/screen-03.jpeg", alt: "Screen 03" },
-          { src: "img/screen-04.jpeg", alt: "Screen 04" },
-          { src: "img/screen-05.png", alt: "Screen 05" }].map((img) => (
+          [{ src: `${process.env.PUBLIC_URL}/img/screen-01.webp`, alt: "Screen 01" },
+          { src: `${process.env.PUBLIC_URL}/img/screen-02.jpeg`, alt: "Screen 02" },
+          { src: `${process.env.PUBLIC_URL}/img/screen-03.jpeg`, alt: "Screen 03" },
+          { src: `${process.env.PUBLIC_URL}/img/screen-04.jpeg`, alt: "Screen 04" },
+          { src: `${process.env.PUBLIC_URL}/img/screen-05.png`, alt: "Screen 05" }].map((img) => (
           <div className={classes.itemDiv}>
             <img className={classes.itemImg} src={img.src} alt={img.alt}/>
           </div>

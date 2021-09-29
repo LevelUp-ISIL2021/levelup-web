@@ -59,8 +59,8 @@ header > * {
   position: relative;
   z-index: 1;
   background-color: rgba(54, 53, 53, 0.5);
-  padding: 25px 0;
-  font-family: "Syncopate", sans-serif;
+  padding: 50px 0;
+  font-family: "Syncopate", 'Roboto', sans-serif;
   color: white;
   text-transform: uppercase;
   font-size: 3rem;
