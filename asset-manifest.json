@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/levelup-web/static/css/main.f3333de2.chunk.css",
+    "main.js": "/levelup-web/static/js/main.71b6e2cd.chunk.js",
+    "main.js.map": "/levelup-web/static/js/main.71b6e2cd.chunk.js.map",
+    "runtime-main.js": "/levelup-web/static/js/runtime-main.67cf49d0.js",
+    "runtime-main.js.map": "/levelup-web/static/js/runtime-main.67cf49d0.js.map",
+    "static/css/2.9a5c1f03.chunk.css": "/levelup-web/static/css/2.9a5c1f03.chunk.css",
+    "static/js/2.3689c035.chunk.js": "/levelup-web/static/js/2.3689c035.chunk.js",
+    "static/js/2.3689c035.chunk.js.map": "/levelup-web/static/js/2.3689c035.chunk.js.map",
+    "static/js/3.0b89ad86.chunk.js": "/levelup-web/static/js/3.0b89ad86.chunk.js",
+    "static/js/3.0b89ad86.chunk.js.map": "/levelup-web/static/js/3.0b89ad86.chunk.js.map",
+    "index.html": "/levelup-web/index.html",
+    "static/css/2.9a5c1f03.chunk.css.map": "/levelup-web/static/css/2.9a5c1f03.chunk.css.map",
+    "static/css/main.f3333de2.chunk.css.map": "/levelup-web/static/css/main.f3333de2.chunk.css.map",
+    "static/js/2.3689c035.chunk.js.LICENSE.txt": "/levelup-web/static/js/2.3689c035.chunk.js.LICENSE.txt",
+    "static/media/styles.css": "/levelup-web/static/media/revicons.e8746a62.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.67cf49d0.js",
+    "static/css/2.9a5c1f03.chunk.css",
+    "static/js/2.3689c035.chunk.js",
+    "static/css/main.f3333de2.chunk.css",
+    "static/js/main.71b6e2cd.chunk.js"
+  ]
+}
