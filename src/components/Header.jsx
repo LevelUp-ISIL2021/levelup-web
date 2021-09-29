@@ -23,13 +23,13 @@ export default function Header() {
         <nav className="header-nav">
           <ul>
             <li>
-              <Link to="/">Inicio</Link>
+              <Link to="/levelup-web/">Inicio</Link>
             </li>
             <li>
-              <Link to="/reviews">Reseñas</Link>
+              <Link to="/levelup-web/reviews">Reseñas</Link>
             </li>
             <li>
-              <Link to="/downloads">Descargas</Link>
+              <Link to="/levelup-web/downloads">Descargas</Link>
             </li>
           </ul>
         </nav>
