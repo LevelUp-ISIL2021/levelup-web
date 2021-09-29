@@ -19,13 +19,13 @@ export default function App() {
         {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/downloads">
+          <Route path="/levelup-web/downloads">
             <Downloads />
           </Route>
-          <Route path="/reviews">
+          <Route path="/levelup-web/reviews">
             <Reviews />
           </Route>
-          <Route path="/">
+          <Route path="/levelup-web">
             <Home />
           </Route>
         </Switch>
