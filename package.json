@@ -1,5 +1,4 @@
 {
-  "homepage": "https://LevelUp-ISIL2021.github.io/levelup-web",
   "name": "levelup-web",
   "version": "0.1.0",
   "private": true,
@@ -46,7 +45,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^3.2.3",
     "react-app-rewire-alias": "^1.0.3",
     "react-app-rewired": "^2.1.8"
   }
