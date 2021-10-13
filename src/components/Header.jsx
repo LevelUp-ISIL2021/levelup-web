@@ -1,24 +1,31 @@
 import * as React from 'react';
-// import Button from '@mui/material/Button';
-// import { Link } from "react-router-dom";
+import Button from '@mui/material/Button';
+import { Link } from "react-router-dom";
 
-// import LoginModal from "@components/LoginModal";
+import useButtonStyles from '../utils/styles/buttonStyles';
+import LoginModal from "@components/LoginModal";
 
 export default function Header() {
 
-  // const [open, setOpen] = React.useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const buttonClasses = useButtonStyles();
 
   return (
     <header>
       <div>
+        <Link to="/">
+          <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
             src={`${process.env.PUBLIC_URL}/img/levelup-logo.png`}
             alt="Logo LevelUp"
             className="header-logo"
           />
           <h2>LevelUp</h2>
+          </div>
+        </Link>
       </div>
       <div>
         <nav className="header-nav">
@@ -36,9 +43,15 @@ export default function Header() {
         </nav>
       </div>
       <div>
-        {/* <Button onClick={handleOpen}>Inicia sesión</Button> */}
+        <Button
+          variant="outlined"
+          onClick={handleOpen}
+          classes={{outlinedPrimary: buttonClasses.primaryOutlined}}
+        >
+          Iniciar sesión
+        </Button>
       </div>
-      {/* <LoginModal open={open} handleClose={handleClose} /> */}
+      <LoginModal open={open} handleClose={handleClose} />
     </header>
   )
 }

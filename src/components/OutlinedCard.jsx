@@ -32,8 +32,8 @@ const card = (icon, title, description) => (
 
 export default function OutlinedCard({ icon, title, description }) {
   return (
-    <Box sx={{ width: 275, margin: '0 15px' }}>
-      <Card variant="outlined" style={{ borderRadius: '10px', height: 230 }}>{card(icon, title, description)}</Card>
+    <Box sx={{ width: 275, margin: '0 15px', borderRadius: '10px', boxShadow: '5px 5px 2px 2px rgba(0, 0, 0, 0.2)' }}>
+      <Card variant="outlined" style={{ height: 230 }}>{card(icon, title, description)}</Card>
     </Box>
   );
 }

@@ -56,7 +56,7 @@ export default function Footer() {
 
     return (
         <footer className={classes.footer}>
-            <h2 className={classes.heading}>Síguenos en nuestras redes</h2>
+            <h2 className={classes.heading}>Síguenos en redes sociales</h2>
             <div className={classes.socialLinksSection}>
                 <ul>
                     <li><FacebookIcon fontSize="large" /></li>
