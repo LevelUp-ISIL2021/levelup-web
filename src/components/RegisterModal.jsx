@@ -10,6 +10,9 @@ import TextField from '@mui/material/TextField';
 
 import { isTextEmpty, isEmailFormatValid, isPasswordFormatValid } from '../utils/helpers/validationHelpers';
 import useButtonStyles from '../utils/styles/buttonStyles';
+import axios from 'axios';
+import { ACCOUNT_ENDPOINT, BASE_API, SIGNUP_ENDPOINT } from '../utils/appConstants';
+import UserContext from '../context/UserContext';
 
 const useStyles = makeStyles({
     mainContainer: {
@@ -27,6 +30,10 @@ const useStyles = makeStyles({
     },
     statusMessage: {
         textAlign: 'center'
+    },
+    errorMessage: {
+        textAlign: 'center',
+        color: 'red !important',
     }
 });
 
@@ -47,6 +54,7 @@ export default function RegisterModal({ open, handleClose }) {
 
     const classes = useStyles();
     const buttonClasses = useButtonStyles();
+    const { user, setUser } = React.useContext(UserContext);
 
     const [registerState, setRegisterState] = React.useState({
         email: "",
@@ -68,11 +76,41 @@ export default function RegisterModal({ open, handleClose }) {
             phoneNumber: { error: false, message: "" }
         },
         status: {
+            error: false,
             message: "",
             loading: false,
             finishedLoading: false
         }
     });
+
+    function resetRegisterState(){
+        setRegisterState({
+            email: "",
+            password: "",
+            passwordCheck: "",
+            firstName: "",
+            firstLastName: "",
+            secondLastName: "",
+            documentNumber: "",
+            phoneNumber: "",
+            errors: {
+                email: { error: false, message: "" },
+                password: { error: false, message: "" },
+                passwordCheck: { error: false, message: "" },
+                firstName: { error: false, message: "" },
+                firstLastName: { error: false, message: "" },
+                secondLastName: { error: false, message: "" },
+                documentNumber: { error: false, message: "" },
+                phoneNumber: { error: false, message: "" }
+            },
+            status: {
+                error: false,
+                message: "",
+                loading: false,
+                finishedLoading: false
+            }
+        })
+    }
 
     const handleInputChange = (field) => (e) => {
         const currentInput = e.target.value;
@@ -235,21 +273,69 @@ export default function RegisterModal({ open, handleClose }) {
             setRegisterState((state) => ({
                 ...state,
                 status: {
+                    error: false,
                     message: "Registrando usuario...",
                     loading: true,
                     finishedLoading: false
                 }
             }));
-            setTimeout(() => {
-                setRegisterState((state) => ({
-                    ...state,
-                    status: {
-                        message: "",
-                        loading: false,
-                        finishedLoading: true
-                    }
-                }));
-            }, 3000);
+
+            const signUpUser = {
+                email: registerState.email,
+                password: registerState.password,
+                firstname: registerState.firstName,
+                lastnamefather: registerState.firstLastName,
+                lastnamemother: registerState.secondLastName,
+                dni: registerState.documentNumber,
+                phonenumber: registerState.phoneNumber
+            };
+
+            // const loginResponse = await AccountService.login(authCredentials);
+            axios.post(BASE_API + SIGNUP_ENDPOINT, signUpUser)
+                .then((res) => {
+                    console.log('Register response:', res);
+                    setRegisterState((state) => ({
+                        ...state,
+                        status: {
+                            error: false,
+                            message: "Usuario registrado con éxito",
+                            loading: false,
+                            finishedLoading: true
+                        }
+                    }));
+                    // setUser({
+                    //     email: registerState.email,
+                    //     firstname: registerState.firstName,
+                    //     lastnamefather: registerState.firstLastName,
+                    //     lastnamemother: registerState.secondLastName,
+                    // });
+                    localStorage.setItem('token', res.data.token);
+                    axios.get(BASE_API + ACCOUNT_ENDPOINT, {headers: { 'x-access-token': res.data.token } })
+                        .then((res) => {
+                            console.log('Get current user response:', res);
+                            setUser(res.data);
+                        }, (err) => {
+                            console.log('Get current user err:', err.response);
+                        });
+                    resetRegisterState();
+                    handleClose();
+                }, (err) => {
+                    console.log('Register err:', err.response);
+                    let message = "Hubo un problema al registrar el usuario";
+                    if (err.response.data.message.includes('email already exists'))
+                        message = "Ya existe un usuario registrado con ese correo";
+                    if (err.response.data.message.includes('dni already exists'))
+                        message = "Ya existe un usuario registrado con ese DNI";
+                    setRegisterState((state) => ({
+                        ...state,
+                        status: {
+                            error: true,
+                            message: message,
+                            loading: false,
+                            finishedLoading: true
+                        }
+                    }));
+                });
         }
     }
 
@@ -378,10 +464,11 @@ export default function RegisterModal({ open, handleClose }) {
                         onChange={handleInputChange('passwordCheck')}
                         helperText={registerState.errors.passwordCheck.error && registerState.errors.passwordCheck.message}
                     />
-                    <p className={classes.statusMessage}>{registerState.status.message}</p>
+                    <p className={registerState.status.error ? classes.errorMessage : classes.statusMessage}>{registerState.status.message}</p>
                     <Button
                         fullWidth
                         variant="contained"
+                        disabled={registerState.status.loading}
                         className={classes.signUpButton}
                         onClick={signup}
                         classes={{containedPrimary: buttonClasses.primaryContained}}

@@ -3,6 +3,7 @@ import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 
 import useButtonStyles from '../utils/styles/buttonStyles';
+import { Grow } from "@mui/material";
 
 const useStyles = makeStyles({
     card: {
@@ -28,6 +29,7 @@ export default function DownloadCard({ download: { osName, icon, instruction, ur
   }
     
   return (
+    <Grow in timeout={500}>
     <div className={classes.card}>
         {icon}
         <p style={{ textAlign: 'center' }}>{instruction}</p>
@@ -39,5 +41,6 @@ export default function DownloadCard({ download: { osName, icon, instruction, ur
           Descargar para {osName}
         </Button>
     </div>
+    </Grow>
   );
 }

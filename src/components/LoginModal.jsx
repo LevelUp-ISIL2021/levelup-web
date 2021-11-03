@@ -7,10 +7,14 @@ import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@mui/icons-material/Person';
 import TextField from '@mui/material/TextField';
 import Modal from '@mui/material/Modal';
-import { isTextEmpty, isEmailFormatValid } from '../utils/helpers/validationHelpers';
 
 import RegisterModal from "@components/RegisterModal";
 import useButtonStyles from '../utils/styles/buttonStyles';
+import { isTextEmpty, isEmailFormatValid } from '../utils/helpers/validationHelpers';
+// import AccountService from '../api/accountService';
+import axios from 'axios';
+import { ACCOUNT_ENDPOINT, BASE_API, SIGNIN_ENDPOINT } from '../utils/appConstants';
+import UserContext from '../context/UserContext';
 
 const useStyles = makeStyles({
     textInput: {
@@ -21,6 +25,10 @@ const useStyles = makeStyles({
     },
     statusMessage: {
         textAlign: 'center'
+    },
+    errorMessage: {
+        textAlign: 'center',
+        color: 'red !important',
     },
     signupLink: {
         color: '#fe691d !important',
@@ -46,6 +54,7 @@ const style = {
 export default function LoginModal({ open, handleClose }) {
     const classes = useStyles();
     const buttonClasses = useButtonStyles();
+    const { user, setUser} = React.useContext(UserContext);
 
     const [openRegisterModal, setOpenRegisterModal] = React.useState(false);
     const handleOpenRegisterModal = () => setOpenRegisterModal(true);
@@ -68,11 +77,35 @@ export default function LoginModal({ open, handleClose }) {
             }
         },
         status: {
+            error: false,
             message: "",
             loading: false,
             finishedLoading: false
         }
     });
+
+    function resetLoginState() {
+        setLoginState({
+            email: "",
+            password: "",
+            errors: {
+                email: {
+                    error: false,
+                    message: ""
+                },
+                password: {
+                    error: false,
+                    message: ""
+                }
+            },
+            status: {
+                error: false,
+                message: "",
+                loading: false,
+                finishedLoading: false
+            }
+        });
+    }
 
     const handleInputChange = (field) => (e) => {
         const currentInput = e.target.value;
@@ -145,21 +178,58 @@ export default function LoginModal({ open, handleClose }) {
             setLoginState((state) => ({
                 ...state,
                 status: {
+                    error: false,
                     message: "Autenticando usuario...",
                     loading: true,
                     finishedLoading: false
                 }
             }));
-            setTimeout(() => {
-                setLoginState((state) => ({
-                    ...state,
-                    status: {
-                        message: "",
-                        loading: false,
-                        finishedLoading: true
-                    }
-                }));
-            }, 3000);
+
+            const authCredentials = {
+                email: loginState.email,
+                password: loginState.password
+            };
+
+            // const loginResponse = await AccountService.login(authCredentials);
+            axios.post(BASE_API + SIGNIN_ENDPOINT, authCredentials)
+                .then((res) => {
+                    console.log('Login response:', res);
+                    setLoginState((state) => ({
+                        ...state,
+                        status: {
+                            error: false,
+                            message: "Bienvenido/a",
+                            loading: false,
+                            finishedLoading: true
+                        }
+                    }));
+                    // setUser({
+                    //     email: loginState.email
+                    // });
+                    localStorage.setItem('token', res.data.token);
+                    axios.get(BASE_API + ACCOUNT_ENDPOINT, {headers: { 'x-access-token': res.data.token } })
+                        .then((res) => {
+                            console.log('Get current user response:', res);
+                            setUser(res.data);
+                        }, (err) => {
+                            console.log('Get current user err:', err.response);
+                        });
+                    
+                    resetLoginState();
+                    handleClose();
+                }, (err) => {
+                    console.log('Login err:', err.response);
+                    setLoginState((state) => ({
+                        ...state,
+                        status: {
+                            error: true,
+                            message: "El usuario o contraseña proporcionados son incorrectos",
+                            loading: false,
+                            finishedLoading: true
+                        }
+                    }));
+                });
+            
         }
     }
 
@@ -204,10 +274,11 @@ export default function LoginModal({ open, handleClose }) {
                     onChange={handleInputChange('password')}
                     helperText={loginState.errors.password.error && loginState.errors.password.message}
                 />
-                <p className={classes.statusMessage}>{loginState.status.message}</p>
+                <p className={loginState.status.error ? classes.errorMessage : classes.statusMessage}>{loginState.status.message}</p>
                 <Button
                     fullWidth
                     variant="contained"
+                    disabled={loginState.status.loading}
                     className={classes.loginButton}
                     onClick={login}
                     classes={{containedPrimary: buttonClasses.primaryContained}}

@@ -13,6 +13,7 @@ import SpellcheckIcon from '@mui/icons-material/Spellcheck';
 import useButtonStyles from '../utils/styles/buttonStyles';
 import ScreenshotsCarousel from '@components/ScreenshotsCarousel';
 import OutlinedCard from "@components/OutlinedCard";
+import { Fade, Zoom } from '@mui/material';
 
 const useStyles = makeStyles({
   sectionHeading: {
@@ -80,6 +81,7 @@ export default function Home() {
           {/* <button className="cta-button">
             Descargar
           </button> */}
+          <Fade in timeout={2500}>
           <Button
             variant="contained"
             color="primary"
@@ -91,6 +93,7 @@ export default function Home() {
           >
             Descargar
           </Button>
+          </Fade>
         </div>
       </header>
 
@@ -107,20 +110,24 @@ export default function Home() {
 
         <div className={classes.attributesSection}>
           <h2 className={classes.sectionHeading}>Nuestros juegos</h2>
+          <Zoom in timeout={4000}>
           <div className={classes.carouselContainer}>
             <OutlinedCard icon={<StarIcon fontSize="large" />} title={"Recompensas"} description={"Juegos con recompensas para todos, para que disfruten mientras aprenden"}/>
             <OutlinedCard icon={<AccessAlarmIcon fontSize="large" />} title={"Tiempo"} description={"Con límites de tiempo para poder mejorar cada vez más"}/>
             <OutlinedCard icon={<VolumeUpIcon fontSize="large" />} title={"Sonido interactivo"} description={"Juegos con sonido interactivo para lograr una expriencia completa e inmersiva"}/>
           </div>
+          </Zoom>
         </div>
 
         <div className={classes.topicsSection}>
           <h2 className={classes.sectionHeading}>Temas</h2>
+          <Zoom in timeout={5000}>
           <div className={classes.carouselContainer}>
             <OutlinedCard icon={<FormatListNumberedIcon fontSize="large" />} title={"Números"} description={"Para aprender a contar, ordenar, agrupar y mucho más..."}/>
             <OutlinedCard icon={<ColorLensIcon fontSize="large" />} title={"Colores"} description={"Los colores primarios, secundarios y neutros. Para aprender a combinarlos de las formas más asombrosas..."}/>
             <OutlinedCard icon={<SpellcheckIcon fontSize="large" />} title={"Inglés"} description={"Para dominar el segundo idioma desde una edad temprana..."}/>
           </div>
+          </Zoom>
         </div>
 
         <div className={classes.secondCTASection}>
