@@ -54,7 +54,7 @@ const style = {
 export default function LoginModal({ open, handleClose }) {
     const classes = useStyles();
     const buttonClasses = useButtonStyles();
-    const { user, setUser} = React.useContext(UserContext);
+    const { setUser } = React.useContext(UserContext);
 
     const [openRegisterModal, setOpenRegisterModal] = React.useState(false);
     const handleOpenRegisterModal = () => setOpenRegisterModal(true);
@@ -190,7 +190,6 @@ export default function LoginModal({ open, handleClose }) {
                 password: loginState.password
             };
 
-            // const loginResponse = await AccountService.login(authCredentials);
             axios.post(BASE_API + SIGNIN_ENDPOINT, authCredentials)
                 .then((res) => {
                     console.log('Login response:', res);
@@ -203,10 +202,9 @@ export default function LoginModal({ open, handleClose }) {
                             finishedLoading: true
                         }
                     }));
-                    // setUser({
-                    //     email: loginState.email
-                    // });
+
                     localStorage.setItem('token', res.data.token);
+
                     axios.get(BASE_API + ACCOUNT_ENDPOINT, {headers: { 'x-access-token': res.data.token } })
                         .then((res) => {
                             console.log('Get current user response:', res);
@@ -217,6 +215,7 @@ export default function LoginModal({ open, handleClose }) {
                     
                     resetLoginState();
                     handleClose();
+                    
                 }, (err) => {
                     console.log('Login err:', err.response);
                     setLoginState((state) => ({

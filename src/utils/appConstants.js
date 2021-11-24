@@ -4,6 +4,8 @@ export const BASE_API = 'https://level-up.software/api';
 export const ACCOUNT_ENDPOINT = '/auth';
 export const SIGNUP_ENDPOINT = `${ACCOUNT_ENDPOINT}/signup`;
 export const SIGNIN_ENDPOINT = `${ACCOUNT_ENDPOINT}/signin`;
+export const REVIEWS_ENDPOINT = '/reviews';
+export const REVIEWS_BY_USER_ENDPOINT = `${REVIEWS_ENDPOINT}/user`;
 
 // Social links
 export const FACEBOOK_LINK = "https://www.facebook.com/LevelUp-106032731872721";

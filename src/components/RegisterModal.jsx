@@ -54,7 +54,7 @@ export default function RegisterModal({ open, handleClose }) {
 
     const classes = useStyles();
     const buttonClasses = useButtonStyles();
-    const { user, setUser } = React.useContext(UserContext);
+    const { setUser } = React.useContext(UserContext);
 
     const [registerState, setRegisterState] = React.useState({
         email: "",
@@ -290,7 +290,6 @@ export default function RegisterModal({ open, handleClose }) {
                 phonenumber: registerState.phoneNumber
             };
 
-            // const loginResponse = await AccountService.login(authCredentials);
             axios.post(BASE_API + SIGNUP_ENDPOINT, signUpUser)
                 .then((res) => {
                     console.log('Register response:', res);
@@ -303,13 +302,9 @@ export default function RegisterModal({ open, handleClose }) {
                             finishedLoading: true
                         }
                     }));
-                    // setUser({
-                    //     email: registerState.email,
-                    //     firstname: registerState.firstName,
-                    //     lastnamefather: registerState.firstLastName,
-                    //     lastnamemother: registerState.secondLastName,
-                    // });
+                    
                     localStorage.setItem('token', res.data.token);
+                    
                     axios.get(BASE_API + ACCOUNT_ENDPOINT, {headers: { 'x-access-token': res.data.token } })
                         .then((res) => {
                             console.log('Get current user response:', res);
@@ -317,8 +312,10 @@ export default function RegisterModal({ open, handleClose }) {
                         }, (err) => {
                             console.log('Get current user err:', err.response);
                         });
+
                     resetRegisterState();
                     handleClose();
+
                 }, (err) => {
                     console.log('Register err:', err.response);
                     let message = "Hubo un problema al registrar el usuario";
@@ -326,6 +323,7 @@ export default function RegisterModal({ open, handleClose }) {
                         message = "Ya existe un usuario registrado con ese correo";
                     if (err.response.data.message.includes('dni already exists'))
                         message = "Ya existe un usuario registrado con ese DNI";
+                        
                     setRegisterState((state) => ({
                         ...state,
                         status: {

@@ -25,8 +25,15 @@ a {
   color: black;
 }
 
+a:hover {
+  text-decoration: underline;
+  color: black;
+  transition: text-decoration 3s linear 1s;
+}
+
 ul {
-  margin: 0
+  margin: 0;
+  padding: 0;
 }
 
 header {

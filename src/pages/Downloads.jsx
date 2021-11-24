@@ -36,7 +36,7 @@ export default function Downloads() {
   ];
     
   return (
-    <div>
+    <div style={{ backgroundColor: 'rgba(0,0,0, 0.05)', padding: '10px', minHeight: '100vh' }}>
       <h1 className={classes.h1Heading}>Selecciona tu descarga</h1>
       <div className={classes.cardContainer}>
         {downloads.map((download) => (
