@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from '@mui/styles';
+import LoginModal from "@components/LoginModal";
 import Button from '@mui/material/Button';
 
 import useButtonStyles from '../utils/styles/buttonStyles';
 import { Grow } from "@mui/material";
+import UserContext from "../context/UserContext";
 
 const useStyles = makeStyles({
     card: {
@@ -25,12 +27,37 @@ const useStyles = makeStyles({
 export default function DownloadCard({ download: { osName, icon, instruction, url } }) {
   const classes = useStyles();
   const buttonClasses = useButtonStyles();
+  const { user } = useContext(UserContext);
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const download = (url) => () => {
-    console.log('Donwloading file from:', url);
+    if (!user) {
+      handleOpen();
+    } else {
+      console.log('Donwloading file from:', url);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute(
+        'download',
+        `Level_up_set_up_1.0.exe`,
+      );
+
+      // Append to html link element page
+      document.body.appendChild(link);
+
+      // Start download
+      link.click();
+
+      // Clean up and remove the link
+      link.parentNode.removeChild(link);
+    }
   }
     
   return (
+    <>
     <Grow in timeout={500}>
     <div className={classes.card}>
         {icon}
@@ -44,5 +71,7 @@ export default function DownloadCard({ download: { osName, icon, instruction, ur
         </Button>
     </div>
     </Grow>
+    <LoginModal open={open} handleClose={handleClose} />
+    </>
   );
 }

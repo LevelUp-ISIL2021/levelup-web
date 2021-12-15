@@ -38,6 +38,13 @@ const responsive = {
 
 export default function ScreenshotsCarousel() {
   const classes = useStyles();
+  const screenshots = [
+    { id: "img-01", src: `${process.env.PUBLIC_URL}/img/unknown-3.png`, alt: "Screen 01" },
+    { id: "img-02", src: `${process.env.PUBLIC_URL}/img/unknown-4.png`, alt: "Screen 02" },
+    { id: "img-03", src: `${process.env.PUBLIC_URL}/img/unknown-5.png`, alt: "Screen 03" },
+    { id: "img-04", src: `${process.env.PUBLIC_URL}/img/unknown-3.png`, alt: "Screen 04" },
+    { id: "img-05", src: `${process.env.PUBLIC_URL}/img/unknown-4.png`, alt: "Screen 05" }
+  ];
 
   return (
       <Carousel
@@ -47,12 +54,8 @@ export default function ScreenshotsCarousel() {
         responsive={responsive}
       >
         {
-          [{ src: `${process.env.PUBLIC_URL}/img/unknown-3.png`, alt: "Screen 01" },
-          { src: `${process.env.PUBLIC_URL}/img/unknown-4.png`, alt: "Screen 02" },
-          { src: `${process.env.PUBLIC_URL}/img/unknown-5.png`, alt: "Screen 03" },
-          { src: `${process.env.PUBLIC_URL}/img/unknown-3.png`, alt: "Screen 04" },
-          { src: `${process.env.PUBLIC_URL}/img/unknown-4.png`, alt: "Screen 05" }].map((img) => (
-          <div className={classes.itemDiv}>
+          screenshots.map((img) => (
+          <div key={img.id} className={classes.itemDiv}>
             <img className={classes.itemImg} src={img.src} alt={img.alt}/>
           </div>
         ))

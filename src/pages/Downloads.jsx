@@ -24,14 +24,14 @@ export default function Downloads() {
       osName: 'macOS',
       icon: <AppleIcon fontSize="large" style={{transform: 'scale(1.8)'}}/>,
       instruction: 'Si tu sistema operativo es macOS, descarga este instalador',
-      url: 'https://level-up.software/macos-installer.dmg'
+      url: 'https://level-up.sfo3.digitaloceanspaces.com/Level_up_set_up_1.0.exe'
     },
     {
       id: 2,
       osName: 'Windows',
       icon: <DesktopWindowsIcon fontSize="large" style={{transform: 'scale(1.8)'}}/>,
       instruction: 'Si tu sistema operativo es Windows, descarga este instalador',
-      url: 'https://level-up.software/windows-installer.dmg'
+      url: 'https://level-up.sfo3.digitaloceanspaces.com/Level_up_set_up_1.0.exe'
     }
   ];
     

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -12,17 +12,17 @@ import { BASE_API, ACCOUNT_ENDPOINT } from '../utils/appConstants';
 
 export default function Header() {
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [userState, setUserState] = React.useState({
+  const [userState, setUserState] = useState({
     loading: true
   });
 
-  const { user, setUser } = React.useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const token = localStorage.getItem('token');
     axios.get(BASE_API + ACCOUNT_ENDPOINT, {headers: { 'x-access-token': token } })
       .then((res) => {

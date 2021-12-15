@@ -9,10 +9,11 @@ import TextField from '@mui/material/TextField';
 import Modal from '@mui/material/Modal';
 
 import useButtonStyles from '../utils/styles/buttonStyles';
-import { isTextEmpty } from '../utils/helpers/validationHelpers';
+import { isReviewFormatValid, isTextEmpty, isTextLongEnough } from '../utils/helpers/validationHelpers';
 // import AccountService from '../api/accountService';
 import axios from 'axios';
 import { BASE_API, REVIEWS_ENDPOINT } from '../utils/appConstants';
+import UserContext from '../context/UserContext';
 
 const useStyles = makeStyles({
     textInput: {
@@ -52,6 +53,8 @@ const style = {
 export default function ReviewModal({ open, handleClose }) {
     const classes = useStyles();
     const buttonClasses = useButtonStyles();
+
+    const { user } = React.useContext(UserContext);
 
     const [reviewState, setReviewState] = React.useState({
         review: "",
@@ -102,7 +105,7 @@ export default function ReviewModal({ open, handleClose }) {
         }));
     }
 
-    function validateIfFieldsAreEmpty() {
+    function validateIfReviewIsNotEmpty() {
         let success = true;
         if (isTextEmpty(reviewState.review)) {
             success = false;
@@ -120,9 +123,54 @@ export default function ReviewModal({ open, handleClose }) {
         return success;
     }
 
-    function submitReview() {
-        const fieldsAreNotEmpty = validateIfFieldsAreEmpty();
-        if (fieldsAreNotEmpty) {
+    function validateIfReviewIsLongEnough() {
+        let success = true;
+        if (!isTextLongEnough(reviewState.review, 10)) {
+            success = false;
+            setReviewState((state) => ({
+                ...state,
+                errors: {
+                    ...state.errors,
+                    review: {
+                        error: true,
+                        message: "Tu reseña debe contener al menos 10 caracteres"
+                    }
+                }
+            }));
+        }
+        return success;
+    }
+
+    function validateIfReviewFormatIsValid() {
+        let success = true;
+        if (!isReviewFormatValid(reviewState.review)) {
+            success = false;
+            setReviewState((state) => ({
+                ...state,
+                errors: {
+                    ...state.errors,
+                    review: {
+                        error: true,
+                        message: "Tu reseña no contiene suficientes caracteres alfabéticos"
+                    }
+                }
+            }));
+        }
+        return success;
+    }
+
+    function refreshPage() {
+        window.location.reload(false);
+      }
+    
+
+    async function submitReview() {
+        const reviewIsNotEmpty = validateIfReviewIsNotEmpty();
+        const reviewIsLongEnough = validateIfReviewIsLongEnough();
+        const reviewFormatIsValid = validateIfReviewFormatIsValid();
+        if ([reviewIsNotEmpty,
+            reviewIsLongEnough,
+            reviewFormatIsValid].every((val) => val === true)) {
             setReviewState((state) => ({
                 ...state,
                 status: {
@@ -140,34 +188,74 @@ export default function ReviewModal({ open, handleClose }) {
 
             const token = localStorage.getItem('token');
 
-            axios.post(BASE_API + REVIEWS_ENDPOINT, requestBody, {headers: { 'x-access-token': token } })
-                .then((res) => {
-                    console.log('Review response:', res);
-                    setReviewState((state) => ({
-                        ...state,
-                        status: {
-                            error: false,
-                            message: "Gracias por tu reseña",
-                            loading: false,
-                            finishedLoading: true
-                        }
-                    }));
-                    
-                    resetReviewState();
-                    handleClose();
-                    
-                }, (err) => {
-                    console.log('Review err:', err.response);
-                    setReviewState((state) => ({
-                        ...state,
-                        status: {
-                            error: true,
-                            message: err.response.status === 401 ? "Debes iniciar sesión para poder ingresar tu reseña" : "No se pudo registrar tu reseña",
-                            loading: false,
-                            finishedLoading: true
-                        }
-                    }));
-                });
+            const userReviewsResponse = await axios.get(BASE_API + REVIEWS_ENDPOINT + '/user/' + user._id);
+            const userReviews = userReviewsResponse.data;
+
+            if (userReviews.length > 0) {
+                // Update current review
+                const userReview = userReviews[0];
+                axios.put(BASE_API + REVIEWS_ENDPOINT + '/' + userReview._id, requestBody, {headers: { 'x-access-token': token } })
+                    .then((res) => {
+                        console.log('Review response:', res);
+                        setReviewState((state) => ({
+                            ...state,
+                            status: {
+                                error: false,
+                                message: "Se actualizó por tu reseña",
+                                loading: false,
+                                finishedLoading: true
+                            }
+                        }));
+                        
+                        resetReviewState();
+                        handleClose();
+                        refreshPage();
+                        
+                    }, (err) => {
+                        console.log('Review err:', err.response);
+                        setReviewState((state) => ({
+                            ...state,
+                            status: {
+                                error: true,
+                                message: err.response.status === 401 ? "Debes iniciar sesión para poder ingresar tu reseña" : "No se pudo actualizar tu reseña",
+                                loading: false,
+                                finishedLoading: true
+                            }
+                        }));
+                    });
+
+            } else {
+                // Insert new review
+                axios.post(BASE_API + REVIEWS_ENDPOINT, requestBody, {headers: { 'x-access-token': token } })
+                    .then((res) => {
+                        console.log('Review response:', res);
+                        setReviewState((state) => ({
+                            ...state,
+                            status: {
+                                error: false,
+                                message: "Gracias por tu reseña",
+                                loading: false,
+                                finishedLoading: true
+                            }
+                        }));
+                        
+                        resetReviewState();
+                        handleClose();
+                        refreshPage();
+                        
+                    }, (err) => {
+                        console.log('Review err:', err.response);
+                        setReviewState((state) => ({
+                            ...state,
+                            status: {
+                                error: true,
+                                message: err.response.status === 401 ? "Debes iniciar sesión para poder ingresar tu reseña" : "No se pudo registrar tu reseña",
+                                loading: false,
+                                finishedLoading: true
+                            }
+                        }));
+                    });
+            }
             
         }
     }
