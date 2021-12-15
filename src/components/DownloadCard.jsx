@@ -42,7 +42,7 @@ export default function DownloadCard({ download: { osName, icon, instruction, ur
       link.href = url;
       link.setAttribute(
         'download',
-        `Level_up_set_up_1.0.exe`,
+        `LevelUp_setup.exe`,
       );
 
       // Append to html link element page
